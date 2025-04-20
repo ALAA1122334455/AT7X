@@ -466,7 +466,7 @@
             modalCarousel.innerHTML = slides;
             
             // Animation timing - 4x faster than before
-            const animationDelay = 500; // 0.25 seconds between slides (2x faster)
+            const animationDelay = 1100; // 0.25 seconds between slides (2x faster)
             let currentSlide = 0;
             
             // Start the carousel animation
@@ -491,16 +491,15 @@
                 
                 // If we've reached the final slide, prepare to end the carousel
                 if (currentSlide === images.length - 1) {
-                    setTimeout(() => {
-                        clearInterval(carouselInterval);
-                        modalCarousel.style.animation = 'fadeOut 0.5s forwards';
-                        setTimeout(() => {
-                            modalCarousel.style.display = 'none';
-                            mainContent.classList.remove('blur-bg');
-                        }, 500);
-                    }, animationDelay * 2);
-                }
-            }
+    setTimeout(() => {
+        clearInterval(carouselInterval);
+        modalCarousel.style.animation = 'fadeOut 0.5s forwards';
+        setTimeout(() => {
+            modalCarousel.style.display = 'none';
+            mainContent.classList.remove('blur-bg');
+        }, 500);
+    }, animationDelay * 2);
+}
             
             // Click anywhere to skip the carousel
             modalCarousel.addEventListener('click', function() {
