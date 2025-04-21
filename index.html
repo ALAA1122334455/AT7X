@@ -307,6 +307,8 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            opacity: 1;
+            animation: fadeIn 0.5s ease-in-out;
         }
         
         .blur-bg {
@@ -322,7 +324,8 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-            transition: transform 0.25s ease-in-out, opacity 0.15s ease-in-out;
+            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+            opacity: 0;
         }
         
         .modal-slide img {
@@ -351,6 +354,22 @@
             z-index: 8;
         }
         
+        /* Added loading indicator */
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--gold);
+            font-size: 1.2rem;
+            font-family: 'Tajawal', sans-serif;
+            z-index: 5;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+        }
+        
         @keyframes fadeIn {
             0% { opacity: 0; }
             100% { opacity: 1; }
@@ -360,16 +379,69 @@
             0% { opacity: 1; }
             100% { opacity: 0; }
         }
+        
+        /* Skip button */
+        .skip-button {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-size: 1rem;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        
+        .skip-button:hover {
+            background-color: var(--gold);
+            color: black;
+        }
+        
+        /* Progress indicator */
+        .slide-progress {
+            position: absolute;
+            bottom: 15px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            z-index: 1001;
+        }
+        
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-dot.active {
+            background-color: var(--gold);
+            transform: scale(1.2);
+        }
     </style>
 </head>
 <body>
     <!-- Modal carousel -->
     <div class="modal-carousel" id="modalCarousel">
-        <!-- Will be filled dynamically by JavaScript -->
+        <div class="loading-indicator" id="loadingIndicator">جاري تحميل الصور...</div>
+        <div class="skip-button" id="skipButton">تخطي العرض</div>
+        <div class="slide-progress" id="slideProgress">
+            <!-- Will be filled dynamically by JavaScript -->
+        </div>
+        <!-- Slides will be filled dynamically by JavaScript -->
     </div>
     
     <!-- Main content -->
-    <div id="mainContent">
+    <div id="mainContent" class="blur-bg">
         <!-- Hero Section -->
         <section class="section hero">
             <div class="container">
@@ -442,9 +514,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             const modalCarousel = document.getElementById('modalCarousel');
             const mainContent = document.getElementById('mainContent');
-            
-            // Blur main content when modal is active
-            mainContent.classList.add('blur-bg');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const skipButton = document.getElementById('skipButton');
+            const slideProgress = document.getElementById('slideProgress');
             
             // Array of image sources (you will replace these with your actual image paths)
             const images = [
@@ -452,32 +524,105 @@
                 'photo6.jpg', 'photo7.jpg', 'photo8.jpg', 'photo9.jpg', 'photo10.jpg'
             ];
             
-            // Create slides for modal carousel
-            let slides = '';
-            images.forEach((image, index) => {
-                const slideClass = index === 0 ? 'modal-slide active' : 'modal-slide next';
-                slides += `
-                    <div class="${slideClass}" id="slide-${index}">
-                        <img src="${image}" alt="Photo ${index+1}">
-                    </div>
-                `;
+            // Create progress dots
+            let progressDots = '';
+            images.forEach((_, index) => {
+                const dotClass = index === 0 ? 'progress-dot active' : 'progress-dot';
+                progressDots += `<div class="${dotClass}" id="dot-${index}"></div>`;
             });
+            slideProgress.innerHTML = progressDots;
             
-            modalCarousel.innerHTML = slides;
+            // Create slides for modal carousel with image preloading
+            let slidesCreated = 0;
+            let slidesLoaded = 0;
             
-            // Animation timing - 4x faster than before
-            const animationDelay = 1100; // 0.25 seconds between slides (2x faster)
+            // Function to close the carousel
+            function closeCarousel() {
+                modalCarousel.style.animation = 'fadeOut 0.5s forwards';
+                setTimeout(() => {
+                    modalCarousel.style.display = 'none';
+                    mainContent.classList.remove('blur-bg');
+                }, 500);
+                if (carouselInterval) {
+                    clearInterval(carouselInterval);
+                }
+            }
+            
+            // Skip button event
+            skipButton.addEventListener('click', closeCarousel);
+            
+            // Function to preload images and create slides
+            function preloadImagesAndCreateSlides() {
+                // Create empty slides first
+                let slides = '';
+                images.forEach((_, index) => {
+                    const slideClass = index === 0 ? 'modal-slide active' : 'modal-slide next';
+                    slides += `<div class="${slideClass}" id="slide-${index}"></div>`;
+                });
+                modalCarousel.insertAdjacentHTML('afterbegin', slides);
+                
+                // Now preload each image
+                images.forEach((src, index) => {
+                    let img = new Image();
+                    img.onload = function() {
+                        // Image loaded, add to slide
+                        const slide = document.getElementById(`slide-${index}`);
+                        slide.appendChild(img);
+                        slidesLoaded++;
+                        
+                        // If all slides loaded, start the carousel
+                        if (slidesLoaded === images.length) {
+                            loadingIndicator.style.display = 'none';
+                            startCarousel();
+                        }
+                    };
+                    
+                    img.onerror = function() {
+                        // Handle image loading error
+                        console.error(`Error loading image: ${src}`);
+                        
+                        // Create a placeholder with error message
+                        const slide = document.getElementById(`slide-${index}`);
+                        slide.innerHTML = `
+                            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+                                background-color:#222;color:var(--gold);font-family:'Tajawal',sans-serif;padding:20px;text-align:center;">
+                                <p>لم يتم تحميل الصورة</p>
+                            </div>
+                        `;
+                        
+                        slidesLoaded++;
+                        if (slidesLoaded === images.length) {
+                            loadingIndicator.style.display = 'none';
+                            startCarousel();
+                        }
+                    };
+                    
+                    // Set source to begin loading
+                    img.src = src;
+                    img.alt = `Photo ${index+1}`;
+                    img.style.width = '100%';
+                    img.style.height = '100%';
+                    img.style.objectFit = 'cover';
+                    img.style.border = '2px solid var(--gold)';
+                    img.style.borderRadius = '15px';
+                });
+            }
+            
+            // Call preload function
+            preloadImagesAndCreateSlides();
+            
+            let carouselInterval;
             let currentSlide = 0;
             
-            // Start the carousel animation
-            const carouselInterval = setInterval(() => {
-                showNextSlide();
-            }, animationDelay);
-            
+            // Function to show the next slide
             function showNextSlide() {
                 const currentSlideEl = document.getElementById(`slide-${currentSlide}`);
                 const nextSlideIndex = (currentSlide + 1) % images.length;
                 const nextSlideEl = document.getElementById(`slide-${nextSlideIndex}`);
+                
+                // Update progress dots
+                document.getElementById(`dot-${currentSlide}`).classList.remove('active');
+                document.getElementById(`dot-${nextSlideIndex}`).classList.add('active');
                 
                 // Slide current out to left
                 currentSlideEl.classList.remove('active');
@@ -487,29 +632,39 @@
                 nextSlideEl.classList.remove('next');
                 nextSlideEl.classList.add('active');
                 
+                // Reset previous slide to be next for carousel effect
+                setTimeout(() => {
+                    const previousSlideIndex = currentSlide;
+                    document.getElementById(`slide-${previousSlideIndex}`).classList.remove('previous');
+                    document.getElementById(`slide-${previousSlideIndex}`).classList.add('next');
+                }, 500);
+                
                 currentSlide = nextSlideIndex;
                 
                 // If we've reached the final slide, prepare to end the carousel
                 if (currentSlide === images.length - 1) {
-    setTimeout(() => {
-        clearInterval(carouselInterval);
-        modalCarousel.style.animation = 'fadeOut 0.5s forwards';
-        setTimeout(() => {
-            modalCarousel.style.display = 'none';
-            mainContent.classList.remove('blur-bg');
-        }, 500);
-    }, animationDelay * 2);
-}
+                    setTimeout(() => {
+                        closeCarousel();
+                    }, 3000); // Show the last slide for 3 seconds before closing
+                }
+            }
             
-            // Click anywhere to skip the carousel
-            modalCarousel.addEventListener('click', function() {
-                clearInterval(carouselInterval);
-                modalCarousel.style.animation = 'fadeOut 0.5s forwards';
-                setTimeout(() => {
-                    modalCarousel.style.display = 'none';
-                    mainContent.classList.remove('blur-bg');
-                }, 500);
-            });
+            // Function to start the carousel
+            function startCarousel() {
+                // Animation timing - show each slide for 3 seconds
+                const animationDelay = 3000;
+                
+                carouselInterval = setInterval(() => {
+                    showNextSlide();
+                }, animationDelay);
+                
+                // Click anywhere (except on the skip button) to skip the carousel
+                modalCarousel.addEventListener('click', function(e) {
+                    if (e.target !== skipButton && !skipButton.contains(e.target)) {
+                        closeCarousel();
+                    }
+                });
+            }
         });
     </script>
 </body>
