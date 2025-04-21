@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" dir="auto">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alaa Mohammed Mokhtar</title>
+    <title>علاء محمد مختار</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Tajawal:wght@400;700;900&family=Cinzel:wght@400;700;900&display=swap');
         
@@ -22,7 +22,7 @@
         }
         
         body {
-            font-family: 'Playfair Display', 'Tajawal', serif;
+            font-family: 'Tajawal', 'Playfair Display', serif;
             background-color: var(--black);
             color: var(--white);
             line-height: 1.6;
@@ -61,7 +61,7 @@
         
         .name-arabic {
             font-family: 'Tajawal', sans-serif;
-            font-size: 3.5rem; /* Reduced from 5rem */
+            font-size: 3.5rem;
             font-weight: 900;
             color: var(--gold);
             margin-bottom: 1rem;
@@ -85,7 +85,7 @@
         
         .quote {
             font-family: 'Tajawal', sans-serif;
-            font-size: 2rem; /* Reduced from 2.5rem */
+            font-size: 2rem;
             text-align: center;
             margin: 2rem 0;
             color: var(--gold-light);
@@ -193,7 +193,7 @@
         }
         
         .interest-description {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Tajawal', serif;
             font-size: 0.95rem;
             color: var(--white);
             text-align: center;
@@ -239,7 +239,7 @@
         }
         
         .quran-description {
-            font-family: 'Playfair Display', serif;
+            font-family: 'Tajawal', serif;
             font-size: 1.1rem;
             color: var(--white);
             margin: 1.5rem 0;
@@ -294,41 +294,33 @@
             margin-top: 2rem;
         }
         
-        /* Modal styles */
-        .modal-carousel {
+        /* محسن - عرض الصور المتتالي */
+        .carousel-container {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.9);
             z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            opacity: 1;
-            animation: fadeIn 0.5s ease-in-out;
         }
         
-        .blur-bg {
-            filter: blur(8px);
-            transition: filter 0.5s;
-        }
-        
-        .modal-slide {
-            width: 90%;
+        .carousel-slide {
+            position: absolute;
+            width: 80%;
             max-width: 600px;
             height: 400px;
-            position: absolute;
             border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.3);
-            transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
             opacity: 0;
+            transition: opacity 1s ease;
         }
         
-        .modal-slide img {
+        .carousel-slide img {
             width: 100%;
             height: 100%;
             object-fit: cover;
@@ -336,25 +328,37 @@
             border-radius: 15px;
         }
         
-        .modal-slide.active {
-            transform: translateX(0);
+        .slide-visible {
             opacity: 1;
-            z-index: 10;
+            animation: fadeInFromLeft 1s forwards;
         }
         
-        .modal-slide.next {
-            transform: translateX(100vw);
-            opacity: 0;
-            z-index: 9;
+        .slide-exit {
+            animation: fadeOutToRight 1s forwards;
         }
         
-        .modal-slide.previous {
-            transform: translateX(-100vw);
-            opacity: 0;
-            z-index: 8;
+        @keyframes fadeInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
         }
         
-        /* Added loading indicator */
+        @keyframes fadeOutToRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+        }
+        
         .loading-indicator {
             position: absolute;
             top: 50%;
@@ -363,54 +367,24 @@
             color: var(--gold);
             font-size: 1.2rem;
             font-family: 'Tajawal', sans-serif;
-            z-index: 5;
+            z-index: 1001;
             background-color: rgba(0, 0, 0, 0.7);
             padding: 15px 30px;
             border-radius: 10px;
             border: 1px solid var(--gold);
         }
         
-        @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+        .blur-bg {
+            filter: blur(8px);
+            transition: filter 0.5s;
         }
         
-        @keyframes fadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; }
-        }
-        
-        /* Skip button */
-        .skip-button {
+        .progress-indicator {
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            padding: 10px 20px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
-            font-size: 1rem;
-            z-index: 1001;
-            transition: all 0.3s ease;
-        }
-        
-        .skip-button:hover {
-            background-color: var(--gold);
-            color: black;
-        }
-        
-        /* Progress indicator */
-        .slide-progress {
-            position: absolute;
-            bottom: 15px;
-            left: 0;
-            right: 0;
             display: flex;
-            justify-content: center;
             gap: 10px;
             z-index: 1001;
         }
@@ -430,19 +404,16 @@
     </style>
 </head>
 <body>
-    <!-- Modal carousel -->
-    <div class="modal-carousel" id="modalCarousel">
+    <!-- عرض الصور المتتالي -->
+    <div class="carousel-container" id="imageCarousel">
         <div class="loading-indicator" id="loadingIndicator">جاري تحميل الصور...</div>
-        <div class="skip-button" id="skipButton">تخطي العرض</div>
-        <div class="slide-progress" id="slideProgress">
-            <!-- Will be filled dynamically by JavaScript -->
-        </div>
-        <!-- Slides will be filled dynamically by JavaScript -->
+        <div class="progress-indicator" id="progressIndicator"></div>
+        <!-- سيتم إضافة الشرائح ديناميكيًا عن طريق جافا سكريبت -->
     </div>
     
-    <!-- Main content -->
+    <!-- المحتوى الرئيسي -->
     <div id="mainContent" class="blur-bg">
-        <!-- Hero Section -->
+        <!-- قسم البطل -->
         <section class="section hero">
             <div class="container">
                 <div class="name-container">
@@ -456,7 +427,7 @@
             </div>
         </section>
         
-        <!-- Interests Section -->
+        <!-- قسم الاهتمامات -->
         <section class="section interests-section">
             <div class="geometric-pattern"></div>
             <div class="container">
@@ -466,205 +437,170 @@
                 <div class="interests-container">
                     <div class="interest-item">
                         <h3 class="interest-title">Programming</h3>
-                        <p class="interest-description">Passionate about web development, application building, and solving technical problems with creativity.</p>
+                        <p class="interest-description">شغف بتطوير الويب وبناء التطبيقات وحل المشاكل التقنية بإبداع.</p>
                     </div>
                     
                     <div class="interest-item">
                         <h3 class="interest-title">Islamic Studies</h3>
-                        <p class="interest-description">Studying Quran, Sunnah, and Islamic theology with focus on Islamic creed.</p>
+                        <p class="interest-description">دراسة القرآن والسنة وعلوم الدين الإسلامي مع التركيز على العقيدة الإسلامية.</p>
                     </div>
                     
                     <div class="interest-item">
                         <h3 class="interest-title">Innovation</h3>
-                        <p class="interest-description">Developing creative solutions for contemporary challenges with a futuristic perspective.</p>
+                        <p class="interest-description">تطوير حلول إبداعية للتحديات المعاصرة مع نظرة مستقبلية.</p>
                     </div>
                     
                     <div class="interest-item">
                         <h3 class="interest-title">Football</h3>
-                        <p class="interest-description">Passionate about the beautiful game, both playing and following professional leagues and tournaments.</p>
+                        <p class="interest-description">شغف بلعبة كرة القدم، سواء في اللعب أو متابعة الدوريات والبطولات الاحترافية.</p>
                     </div>
                 </div>
             </div>
         </section>
         
-        <!-- Quran Radio Section -->
+        <!-- قسم إذاعة القرآن -->
         <section class="section quran-section">
             <div class="container">
                 <h2 class="section-title">QURAN BROADCAST</h2>
                 <div class="divider"></div>
                 
-                <p class="quran-description">Enjoy a continuous stream of Quranic recitation by my favorite reciter, Abdullah Al-Mousa. His beautiful voice and precise tajweed make for a spiritual and uplifting experience.</p>
+                <p class="quran-description">استمتع ببث مستمر من تلاوة القرآن الكريم بصوت قارئي المفضل، عبد الله الموسى. صوته الجميل وتجويده الدقيق يجعلان التجربة روحانية ومرفعة للنفس.</p>
                 
                 <div class="audio-container">
-                    <h3 class="audio-title">Abdullah Al-Mousa Recitation</h3>
+                    <h3 class="audio-title">تلاوة عبد الله الموسى</h3>
                     <audio controls autoplay loop>
                         <source src="https://backup.qurango.net/radio/abdullah_almousa" type="audio/mpeg">
-                        Your browser does not support the audio element.
+                        متصفحك لا يدعم عنصر الصوت.
                     </audio>
                 </div>
             </div>
         </section>
         
         <footer>
-            <p>© 2025 Alaa Mohammed Mokhtar | All Rights Reserved</p>
+            <p>© 2025 علاء محمد مختار | جميع الحقوق محفوظة</p>
         </footer>
     </div>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const modalCarousel = document.getElementById('modalCarousel');
+            const imageCarousel = document.getElementById('imageCarousel');
             const mainContent = document.getElementById('mainContent');
             const loadingIndicator = document.getElementById('loadingIndicator');
-            const skipButton = document.getElementById('skipButton');
-            const slideProgress = document.getElementById('slideProgress');
+            const progressIndicator = document.getElementById('progressIndicator');
             
-            // Array of image sources (you will replace these with your actual image paths)
+            // مصادر الصور (استبدلها بمسارات الصور الفعلية)
             const images = [
                 'photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg',
                 'photo6.jpg', 'photo7.jpg', 'photo8.jpg', 'photo9.jpg', 'photo10.jpg'
             ];
             
-            // Create progress dots
-            let progressDots = '';
+            // إنشاء مؤشرات التقدم (النقاط)
             images.forEach((_, index) => {
-                const dotClass = index === 0 ? 'progress-dot active' : 'progress-dot';
-                progressDots += `<div class="${dotClass}" id="dot-${index}"></div>`;
+                const dot = document.createElement('div');
+                dot.className = index === 0 ? 'progress-dot active' : 'progress-dot';
+                dot.id = `dot-${index}`;
+                progressIndicator.appendChild(dot);
             });
-            slideProgress.innerHTML = progressDots;
             
-            // Create slides for modal carousel with image preloading
-            let slidesCreated = 0;
-            let slidesLoaded = 0;
+            // متغيرات للتحكم بالعرض
+            let currentImageIndex = 0;
+            let imagesLoaded = 0;
+            let isCarouselRunning = true;
             
-            // Function to close the carousel
-            function closeCarousel() {
-                modalCarousel.style.animation = 'fadeOut 0.5s forwards';
+            // دالة لإنهاء العرض التقديمي
+            function endCarousel() {
+                imageCarousel.style.opacity = '0';
+                imageCarousel.style.transition = 'opacity 1s ease';
+                
                 setTimeout(() => {
-                    modalCarousel.style.display = 'none';
+                    imageCarousel.style.display = 'none';
                     mainContent.classList.remove('blur-bg');
-                }, 500);
-                if (carouselInterval) {
-                    clearInterval(carouselInterval);
+                }, 1000);
+                
+                isCarouselRunning = false;
+            }
+            
+            // دالة لتحميل وعرض الصور بالتسلسل
+            async function loadAndDisplayImages() {
+                // إنشاء عناصر الشرائح أولاً
+                for (let i = 0; i < images.length; i++) {
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    slide.id = `slide-${i}`;
+                    imageCarousel.appendChild(slide);
                 }
-            }
-            
-            // Skip button event
-            skipButton.addEventListener('click', closeCarousel);
-            
-            // Function to preload images and create slides
-            function preloadImagesAndCreateSlides() {
-                // Create empty slides first
-                let slides = '';
-                images.forEach((_, index) => {
-                    const slideClass = index === 0 ? 'modal-slide active' : 'modal-slide next';
-                    slides += `<div class="${slideClass}" id="slide-${index}"></div>`;
-                });
-                modalCarousel.insertAdjacentHTML('afterbegin', slides);
                 
-                // Now preload each image
-                images.forEach((src, index) => {
-                    let img = new Image();
-                    img.onload = function() {
-                        // Image loaded, add to slide
-                        const slide = document.getElementById(`slide-${index}`);
-                        slide.appendChild(img);
-                        slidesLoaded++;
-                        
-                        // If all slides loaded, start the carousel
-                        if (slidesLoaded === images.length) {
-                            loadingIndicator.style.display = 'none';
-                            startCarousel();
-                        }
-                    };
+                // تحميل وعرض الصور واحدة تلو الأخرى
+                for (let i = 0; i < images.length; i++) {
+                    if (!isCarouselRunning) break;
                     
-                    img.onerror = function() {
-                        // Handle image loading error
-                        console.error(`Error loading image: ${src}`);
-                        
-                        // Create a placeholder with error message
-                        const slide = document.getElementById(`slide-${index}`);
-                        slide.innerHTML = `
-                            <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;
-                                background-color:#222;color:var(--gold);font-family:'Tajawal',sans-serif;padding:20px;text-align:center;">
-                                <p>لم يتم تحميل الصورة</p>
-                            </div>
-                        `;
-                        
-                        slidesLoaded++;
-                        if (slidesLoaded === images.length) {
-                            loadingIndicator.style.display = 'none';
-                            startCarousel();
-                        }
-                    };
+                    // تحديث مؤشر التقدم
+                    document.querySelectorAll('.progress-dot').forEach((dot, index) => {
+                        dot.classList.toggle('active', index === i);
+                    });
                     
-                    // Set source to begin loading
-                    img.src = src;
-                    img.alt = `Photo ${index+1}`;
-                    img.style.width = '100%';
-                    img.style.height = '100%';
-                    img.style.objectFit = 'cover';
-                    img.style.border = '2px solid var(--gold)';
-                    img.style.borderRadius = '15px';
-                });
-            }
-            
-            // Call preload function
-            preloadImagesAndCreateSlides();
-            
-            let carouselInterval;
-            let currentSlide = 0;
-            
-            // Function to show the next slide
-            function showNextSlide() {
-                const currentSlideEl = document.getElementById(`slide-${currentSlide}`);
-                const nextSlideIndex = (currentSlide + 1) % images.length;
-                const nextSlideEl = document.getElementById(`slide-${nextSlideIndex}`);
-                
-                // Update progress dots
-                document.getElementById(`dot-${currentSlide}`).classList.remove('active');
-                document.getElementById(`dot-${nextSlideIndex}`).classList.add('active');
-                
-                // Slide current out to left
-                currentSlideEl.classList.remove('active');
-                currentSlideEl.classList.add('previous');
-                
-                // Slide next in from right
-                nextSlideEl.classList.remove('next');
-                nextSlideEl.classList.add('active');
-                
-                // Reset previous slide to be next for carousel effect
-                setTimeout(() => {
-                    const previousSlideIndex = currentSlide;
-                    document.getElementById(`slide-${previousSlideIndex}`).classList.remove('previous');
-                    document.getElementById(`slide-${previousSlideIndex}`).classList.add('next');
-                }, 500);
-                
-                currentSlide = nextSlideIndex;
-                
-                // If we've reached the final slide, prepare to end the carousel
-                if (currentSlide === images.length - 1) {
-                    setTimeout(() => {
-                        closeCarousel();
-                    }, 3000); // Show the last slide for 3 seconds before closing
-                }
-            }
-            
-            // Function to start the carousel
-            function startCarousel() {
-                // Animation timing - show each slide for 3 seconds
-                const animationDelay = 3000;
-                
-                carouselInterval = setInterval(() => {
-                    showNextSlide();
-                }, animationDelay);
-                
-                // Click anywhere (except on the skip button) to skip the carousel
-                modalCarousel.addEventListener('click', function(e) {
-                    if (e.target !== skipButton && !skipButton.contains(e.target)) {
-                        closeCarousel();
+                    // تحميل الصورة الحالية
+                    try {
+                        const currentSlide = document.getElementById(`slide-${i}`);
+                        
+                        // إزالة الصورة السابقة إذا وجدت
+                        if (i > 0) {
+                            const previousSlide = document.getElementById(`slide-${i-1}`);
+                            previousSlide.classList.add('slide-exit');
+                            setTimeout(() => {
+                                previousSlide.style.display = 'none';
+                            }, 1000);
+                        }
+                        
+                        // إنشاء وتحميل الصورة الجديدة
+                        await new Promise((resolve, reject) => {
+                            const img = new Image();
+                            img.onload = () => {
+                                currentSlide.innerHTML = '';
+                                currentSlide.appendChild(img);
+                                currentSlide.classList.add('slide-visible');
+                                resolve();
+                            };
+                            
+                            img.onerror = () => {
+                                currentSlide.innerHTML = `
+                                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+                                        background-color:#222; color:var(--gold); font-family:'Tajawal',sans-serif; padding:20px; text-align:center;">
+                                        <p>لم يتمكن من تحميل الصورة</p>
+                                    </div>
+                                `;
+                                currentSlide.classList.add('slide-visible');
+                                resolve();
+                            };
+                            
+                            // ضبط مصدر الصورة لبدء التحميل
+                            img.src = images[i];
+                            img.alt = `صورة ${i+1}`;
+                            loadingIndicator.textContent = `جاري تحميل الصورة ${i+1} من ${images.length}`;
+                        });
+                        
+                        // إخفاء مؤشر التحميل بعد تحميل الصورة الأولى
+                        if (i === 0) {
+                            loadingIndicator.style.display = 'none';
+                        }
+                        
+                        // الانتظار 4 ثوانٍ قبل الانتقال إلى الصورة التالية
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        
+                    } catch (error) {
+                        console.error('حدث خطأ أثناء تحميل الصورة:', error);
                     }
-                });
+                }
+                
+                // إنهاء العرض التقديمي بعد عرض جميع الصور
+                endCarousel();
             }
+            
+            // بدء العرض التقديمي
+            loadAndDisplayImages();
+            
+            // إمكانية النقر لإنهاء العرض التقديمي
+            imageCarousel.addEventListener('click', endCarousel);
         });
     </script>
 </body>
