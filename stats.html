@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إحصائيات الزيارات</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+        :root {
+            --black: #000000;
+            --dark: #121212;
+            --gold: #d4af37;
+            --gold-light: #f9e4a1;
+            --white: #ffffff;
+        }
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--dark);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: var(--black);
+            padding: 30px 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+        }
+        h1 {
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--gold-light);
+            font-weight: 700;
+        }
+        input[type="password"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--gold);
+            border-radius: 5px;
+            background-color: var(--dark);
+            color: var(--white);
+            font-family: 'Tajawal', sans-serif;
+        }
+        button {
+            padding: 10px 25px;
+            background-color: var(--gold);
+            color: var(--black);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Tajawal', sans-serif;
+            font-weight: 700;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: var(--gold-light);
+        }
+        #statsResult {
+            margin-top: 30px;
+            text-align: right;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        #statsResult h2 {
+            color: var(--gold);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        #statsResult p {
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        #statsResult ul {
+            list-style: none;
+            padding: 0;
+        }
+        #statsResult li {
+            margin-bottom: 8px;
+            font-size: 0.95em;
+            border-bottom: 1px dashed rgba(212, 175, 55, 0.2);
+            padding-bottom: 5px;
+        }
+        #errorMessage {
+            color: #ff4d4d;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+        /* Scrollbar styling */
+        #statsResult::-webkit-scrollbar {
+            width: 8px;
+        }
+        #statsResult::-webkit-scrollbar-track {
+            background: var(--dark);
+            border-radius: 5px;
+        }
+        #statsResult::-webkit-scrollbar-thumb {
+            background-color: var(--gold);
+            border-radius: 5px;
+            border: 2px solid var(--dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>عرض إحصائيات الزيارات</h1>
+        <label for="password">كلمة المرور:</label>
+        <input type="password" id="password" name="password">
+        <button onclick="fetchStats()">عرض الإحصائيات</button>
+        <div id="errorMessage"></div>
+        <div id="statsResult" style="display: none;">
+            <h2>الإحصائيات</h2>
+            <p id="visitCount"></p>
+            <h3>تواريخ الزيارات (الأحدث أولاً):</h3>
+            <ul id="visitList"></ul>
+        </div>
+    </div>
+
+    <script>
+        // !!! هام: استبدل هذا الرابط بعنوان URL لتطبيق الويب الخاص بك الذي حصلت عليه بعد نشر Google Apps Script
+        const gasWebAppUrl = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL'; 
+
+        async function fetchStats() {
+            const passwordInput = document.getElementById('password');
+            const password = passwordInput.value;
+            const statsResultDiv = document.getElementById('statsResult');
+            const visitCountP = document.getElementById('visitCount');
+            const visitListUl = document.getElementById('visitList');
+            const errorMessageDiv = document.getElementById('errorMessage');
+
+            // مسح النتائج والأخطاء السابقة
+            statsResultDiv.style.display = 'none';
+            visitListUl.innerHTML = '';
+            errorMessageDiv.textContent = '';
+
+            if (!password) {
+                errorMessageDiv.textContent = 'الرجاء إدخال كلمة المرور.';
+                return;
+            }
+
+            if (!gasWebAppUrl || gasWebAppUrl === 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL') {
+                errorMessageDiv.textContent = 'خطأ: لم يتم تكوين عنوان URL لتطبيق الويب في الكود. يرجى تعديل ملف stats.html.';
+                return;
+            }
+
+            // بناء عنوان URL لطلب الإحصائيات
+            const statsUrl = `${gasWebAppUrl}?action=getStats&password=${encodeURIComponent(password)}`;
+
+            try {
+                const response = await fetch(statsUrl);
+                if (!response.ok) {
+                    // محاولة قراءة رسالة الخطأ من النص إذا لم تكن الاستجابة JSON
+                    const errorText = await response.text();
+                    throw new Error(`فشل جلب البيانات: ${response.status} ${response.statusText}. ${errorText}`);
+                }
+                
+                const data = await response.json();
+
+                if (data.error) {
+                    errorMessageDiv.textContent = `خطأ: ${data.error}`;
+                } else {
+                    visitCountP.textContent = `إجمالي عدد الزيارات: ${data.visitCount}`;
+                    if (data.visits && data.visits.length > 0) {
+                        data.visits.forEach(visit => {
+                            const li = document.createElement('li');
+                            li.textContent = visit;
+                            visitListUl.appendChild(li);
+                        });
+                    } else {
+                        const li = document.createElement('li');
+                        li.textContent = 'لا توجد زيارات مسجلة بعد.';
+                        visitListUl.appendChild(li);
+                    }
+                    statsResultDiv.style.display = 'block';
+                    passwordInput.value = ''; // مسح حقل كلمة المرور بعد النجاح
+                }
+            } catch (error) {
+                console.error('Error fetching stats:', error);
+                errorMessageDiv.textContent = `حدث خطأ أثناء جلب الإحصائيات. تحقق من وحدة التحكم لمزيد من التفاصيل أو تأكد من صحة عنوان URL لتطبيق الويب ونشره بشكل صحيح. (${error.message})`;
+            }
+        }
+
+        // السماح بالضغط على Enter في حقل كلمة المرور
+        document.getElementById('password').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // منع الإرسال الافتراضي إذا كان داخل نموذج
+                fetchStats();
+            }
+        });
+    </script>
+</body>
+</html>
+
