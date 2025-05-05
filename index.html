@@ -605,3 +605,33 @@
     </script>
 </body>
 </html>
+
+<!-- بداية كود تسجيل الزيارة -->
+<script>
+    // !!! هام: استبدل هذا الرابط بعنوان URL لتطبيق الويب الخاص بك الذي حصلت عليه بعد نشر Google Apps Script
+    const recordVisitUrl = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL'; 
+
+    // دالة لتسجيل الزيارة عند تحميل الصفحة
+    function logVisit() {
+        if (!recordVisitUrl || recordVisitUrl === 'https://script.google.com/macros/s/AKfycbyw-Iv1bPf5cN78GdRGrIRYe2HWAr68nNQPNNdaxLLYKX5E-q-hYkwm49KLxBMIj0Sb/exec') {
+            console.warn('Visit recording skipped: Google Apps Script Web App URL not configured in index.html.');
+            return; // لا تقم بالتسجيل إذا لم يتم تكوين الرابط
+        }
+        // لا نحتاج إلى إرسال أي بيانات خاصة، فقط نستدعي الرابط لتشغيل دالة recordVisit في Apps Script
+        fetch(recordVisitUrl)
+            .then(response => response.text()) // اقرأ الاستجابة كنص
+            .then(text => {
+                // يمكنك تسجيل الاستجابة في الكونسول إذا أردت التأكد
+                console.log('Visit recording status:', text);
+            })
+            .catch(error => {
+                console.error('Error recording visit:', error);
+            });
+    }
+
+    // استدعاء الدالة عند تحميل المحتوى
+    document.addEventListener('DOMContentLoaded', logVisit);
+</script>
+<!-- نهاية كود تسجيل الزيارة -->
+
+</body>
