@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>علاء محمد مختار</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Tajawal:wght@400;700;900&family=Cinzel:wght@400;700;900&display=swap');
+        
+        :root {
+            --black: #000000;
+            --dark: #121212;
+            --gold: #d4af37;
+            --gold-light: #f9e4a1;
+            --white: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Tajawal', 'Playfair Display', serif;
+            background-color: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        .section {
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background-color: var(--dark);
+            border-radius: 10px;
+            margin: 3vh auto;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+        }
+        
+        .name-container {
+            margin-bottom: 3rem;
+        }
+        
+        .name-arabic {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+            letter-spacing: 4px;
+        }
+        
+        .name-details {
+            font-size: 1.1rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            letter-spacing: 3px;
+        }
+        
+        .divider {
+            width: 120px;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            margin: 1.2rem auto;
+        }
+        
+        .quote {
+            font-family: 'Tajawal', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            color: var(--gold-light);
+            padding: 1.5rem;
+            font-weight: 700;
+            position: relative;
+        }
+        
+        .quote::before,
+        .quote::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 1px;
+            background-color: var(--gold);
+        }
+        
+        .quote::before {
+            top: 0;
+        }
+        
+        .quote::after {
+            bottom: 0;
+        }
+        
+        /* Interests Section */
+        .interests-section {
+            background-color: var(--dark);
+            border-radius: 10px;
+            margin: 3vh auto;
+            padding: 2rem;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+            text-align: center;
+            min-height: auto;
+        }
+        
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            text-align: center;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+        
+        .interests-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+        
+        .interest-item {
+            width: 250px;
+            height: 250px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+        }
+        
+        .interest-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+        }
+        
+        .interest-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, rgba(212, 175, 55, 0.2) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .interest-item:hover::before {
+            opacity: 1;
+        }
+        
+        .interest-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-weight: 700;
+            z-index: 2;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .interest-description {
+            font-family: 'Tajawal', serif;
+            font-size: 0.95rem;
+            color: var(--white);
+            text-align: center;
+            line-height: 1.5;
+            z-index: 2;
+        }
+        
+        /* Quran Radio Section */
+        .quran-section {
+            background-color: var(--dark);
+            border-radius: 10px;
+            margin: 3vh auto;
+            padding: 2rem;
+            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
+            text-align: center;
+            min-height: auto;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .quran-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.05'%3E%3Cpath d='M0 0h40v40H0V0zm40 40h40v40H40V40zm0-40h2l-2 2V0zm0 4l4-4h2l-6 6V4zm0 4l8-8h2L40 10V8zm0 4L52 0h2L40 14v-2zm0 4L56 0h2L40 18v-2zm0 4L60 0h2L40 22v-2zm0 4L64 0h2L40 26v-2zm0 4L68 0h2L40 30v-2zm0 4L72 0h2L40 34v-2zm0 4L76 0h2L40 38v-2zm0 4L80 0v2L42 40h-2zm4 0L80 4v2L46 40h-2zm4 0L80 8v2L50 40h-2zm4 0l28-28v2L54 40h-2zm4 0l24-24v2L58 40h-2zm4 0l20-20v2L62 40h-2zm4 0l16-16v2L66 40h-2zm4 0l12-12v2L70 40h-2zm4 0l8-8v2l-6 6h-2zm4 0l4-4v2l-2 2h-2z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+            z-index: 1;
+        }
+        
+        .audio-container {
+            position: relative;
+            z-index: 5;
+            margin: 2rem auto;
+            max-width: 600px;
+            padding: 1.5rem;
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            border: 1px solid var(--gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+        }
+        
+        .quran-description {
+            font-family: 'Tajawal', serif;
+            font-size: 1.1rem;
+            color: var(--white);
+            margin: 1.5rem 0;
+            line-height: 1.7;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .audio-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 5;
+        }
+        
+        audio {
+            width: 100%;
+            margin: 1rem 0;
+            border-radius: 30px;
+            position: relative;
+            z-index: 5;
+        }
+        
+        audio::-webkit-media-controls-panel {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        audio::-webkit-media-controls-play-button {
+            background-color: var(--gold);
+            border-radius: 50%;
+        }
+        
+        /* Geometric pattern decoration */
+        .geometric-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0.08;
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23d4af37' fill-opacity='0.4'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 1;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1.5rem 0;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            margin-top: 2rem;
+        }
+        
+        /* محسن - عرض الصور المتتالي */
+        .carousel-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .carousel-slide {
+            position: absolute;
+            width: 80%;
+            max-width: 600px;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 2px solid var(--gold);
+            border-radius: 15px;
+        }
+        
+        .slide-visible {
+            opacity: 1;
+            animation: fadeInFromLeft 1s forwards;
+        }
+        
+        .slide-exit {
+            animation: fadeOutToRight 1s forwards;
+        }
+        
+        @keyframes fadeInFromLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeOutToRight {
+            from {
+                opacity: 1;
+                transform: translateX(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+        }
+        
+        .loading-indicator {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: var(--gold);
+            font-size: 1.2rem;
+            font-family: 'Tajawal', sans-serif;
+            z-index: 1001;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px 30px;
+            border-radius: 10px;
+            border: 1px solid var(--gold);
+        }
+        
+        .blur-bg {
+            filter: blur(8px);
+            transition: filter 0.5s;
+        }
+        
+        .progress-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 1001;
+        }
+        
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .progress-dot.active {
+            background-color: var(--gold);
+            transform: scale(1.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- عرض الصور المتتالي -->
+    <div class="carousel-container" id="imageCarousel">
+        <div class="loading-indicator" id="loadingIndicator">جاري تحميل الصور...</div>
+        <div class="progress-indicator" id="progressIndicator"></div>
+        <!-- سيتم إضافة الشرائح ديناميكيًا عن طريق جافا سكريبت -->
+    </div>
+    
+    <!-- المحتوى الرئيسي -->
+    <div id="mainContent" class="blur-bg">
+        <!-- قسم البطل -->
+        <section class="section hero">
+            <div class="container">
+                <div class="name-container">
+                    <h1 class="name-arabic">علاء محمد مختار</h1>
+                    <div class="divider"></div>
+                    <p class="name-details">AGE: 16 | JULY 23</p>
+                    <p class="name-details">AZHARY-MUSLIM</p>
+                </div>
+                
+                <div class="quote">وكآن فضل الله عليك عظيما</div>
+            </div>
+        </section>
+        
+        <!-- قسم الاهتمامات -->
+        <section class="section interests-section">
+            <div class="geometric-pattern"></div>
+            <div class="container">
+                <h2 class="section-title">INTERESTS</h2>
+                <div class="divider"></div>
+                
+                <div class="interests-container">
+                    <div class="interest-item">
+                        <h3 class="interest-title">Programming</h3>
+                        <p class="interest-description">شغف بتطوير الويب وبناء التطبيقات وحل المشاكل التقنية بإبداع.</p>
+                    </div>
+                    
+                    <div class="interest-item">
+                        <h3 class="interest-title">Islamic Studies</h3>
+                        <p class="interest-description">دراسة القرآن والسنة وعلوم الدين الإسلامي مع التركيز على العقيدة الإسلامية.</p>
+                    </div>
+                    
+                    <div class="interest-item">
+                        <h3 class="interest-title">Innovation</h3>
+                        <p class="interest-description">تطوير حلول إبداعية للتحديات المعاصرة مع نظرة مستقبلية.</p>
+                    </div>
+                    
+                    <div class="interest-item">
+                        <h3 class="interest-title">Football</h3>
+                        <p class="interest-description">شغف بلعبة كرة القدم، سواء في اللعب أو متابعة الدوريات والبطولات الاحترافية.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- قسم إذاعة القرآن -->
+        <section class="section quran-section">
+            <div class="container">
+                <h2 class="section-title">QURAN BROADCAST</h2>
+                <div class="divider"></div>
+                
+                <p class="quran-description">استمتع ببث مستمر من تلاوة القرآن الكريم بصوت قارئي المفضل، عبد الله الموسى. صوته الجميل وتجويده الدقيق يجعلان التجربة روحانية ومرفعة للنفس.</p>
+                
+                <div class="audio-container">
+                    <h3 class="audio-title">تلاوة عبد الله الموسى</h3>
+                    <audio controls autoplay loop>
+                        <source src="https://backup.qurango.net/radio/abdullah_almousa" type="audio/mpeg">
+                        متصفحك لا يدعم عنصر الصوت.
+                    </audio>
+                </div>
+            </div>
+        </section>
+        
+        <footer>
+            <p>© 2025 علاء محمد مختار | جميع الحقوق محفوظة</p>
+        </footer>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const imageCarousel = document.getElementById('imageCarousel');
+            const mainContent = document.getElementById('mainContent');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const progressIndicator = document.getElementById('progressIndicator');
+            
+            // مصادر الصور (استبدلها بمسارات الصور الفعلية)
+            const images = [
+                'photo1.jpg', 'photo2.jpg', 'photo3.jpg', 'photo4.jpg', 'photo5.jpg',
+                'photo6.jpg', 'photo7.jpg', 'photo8.jpg', 'photo9.jpg', 'photo10.jpg'
+            ];
+            
+            // إنشاء مؤشرات التقدم (النقاط)
+            images.forEach((_, index) => {
+                const dot = document.createElement('div');
+                dot.className = index === 0 ? 'progress-dot active' : 'progress-dot';
+                dot.id = `dot-${index}`;
+                progressIndicator.appendChild(dot);
+            });
+            
+            // متغيرات للتحكم بالعرض
+            let currentImageIndex = 0;
+            let imagesLoaded = 0;
+            let isCarouselRunning = true;
+            
+            // دالة لإنهاء العرض التقديمي
+            function endCarousel() {
+                imageCarousel.style.opacity = '0';
+                imageCarousel.style.transition = 'opacity 1s ease';
+                
+                setTimeout(() => {
+                    imageCarousel.style.display = 'none';
+                    mainContent.classList.remove('blur-bg');
+                }, 1000);
+                
+                isCarouselRunning = false;
+            }
+            
+            // دالة لتحميل وعرض الصور بالتسلسل
+            async function loadAndDisplayImages() {
+                // إنشاء عناصر الشرائح أولاً
+                for (let i = 0; i < images.length; i++) {
+                    const slide = document.createElement('div');
+                    slide.className = 'carousel-slide';
+                    slide.id = `slide-${i}`;
+                    imageCarousel.appendChild(slide);
+                }
+                
+                // تحميل وعرض الصور واحدة تلو الأخرى
+                for (let i = 0; i < images.length; i++) {
+                    if (!isCarouselRunning) break;
+                    
+                    // تحديث مؤشر التقدم
+                    document.querySelectorAll('.progress-dot').forEach((dot, index) => {
+                        dot.classList.toggle('active', index === i);
+                    });
+                    
+                    // تحميل الصورة الحالية
+                    try {
+                        const currentSlide = document.getElementById(`slide-${i}`);
+                        
+                        // إزالة الصورة السابقة إذا وجدت
+                        if (i > 0) {
+                            const previousSlide = document.getElementById(`slide-${i-1}`);
+                            previousSlide.classList.add('slide-exit');
+                            setTimeout(() => {
+                                previousSlide.style.display = 'none';
+                            }, 1000);
+                        }
+                        
+                        // إنشاء وتحميل الصورة الجديدة
+                        await new Promise((resolve, reject) => {
+                            const img = new Image();
+                            img.onload = () => {
+                                currentSlide.innerHTML = '';
+                                currentSlide.appendChild(img);
+                                currentSlide.classList.add('slide-visible');
+                                resolve();
+                            };
+                            
+                            img.onerror = () => {
+                                currentSlide.innerHTML = `
+                                    <div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+                                        background-color:#222; color:var(--gold); font-family:'Tajawal',sans-serif; padding:20px; text-align:center;">
+                                        <p>لم يتمكن من تحميل الصورة</p>
+                                    </div>
+                                `;
+                                currentSlide.classList.add('slide-visible');
+                                resolve();
+                            };
+                            
+                            // ضبط مصدر الصورة لبدء التحميل
+                            img.src = images[i];
+                            img.alt = `صورة ${i+1}`;
+                            loadingIndicator.textContent = `جاري تحميل الصورة ${i+1} من ${images.length}`;
+                        });
+                        
+                        // إخفاء مؤشر التحميل بعد تحميل الصورة الأولى
+                        if (i === 0) {
+                            loadingIndicator.style.display = 'none';
+                        }
+                        
+                        // الانتظار 4 ثوانٍ قبل الانتقال إلى الصورة التالية
+                        await new Promise(resolve => setTimeout(resolve, 277));
+                        
+                    } catch (error) {
+                        console.error('حدث خطأ أثناء تحميل الصورة:', error);
+                    }
+                }
+                
+                // إنهاء العرض التقديمي بعد عرض جميع الصور
+                endCarousel();
+            }
+            
+            // بدء العرض التقديمي
+            loadAndDisplayImages();
+            
+            // إمكانية النقر لإنهاء العرض التقديمي
+            imageCarousel.addEventListener('click', endCarousel);
+        });
+    </script>
+</body>
+</html>
+
+<!-- بداية كود تسجيل الزيارة -->
+<script>
+    // !!! هام: استبدل هذا الرابط بعنوان URL لتطبيق الويب الخاص بك الذي حصلت عليه بعد نشر Google Apps Script
+    const recordVisitUrl = 'https://script.google.com/macros/s/AKfycbyw-Iv1bPf5cN78GdRGrIRYe2HWAr68nNQPNNdaxLLYKX5E-q-hYkwm49KLxBMIj0Sb/exec'; 
+
+    // دالة لتسجيل الزيارة عند تحميل الصفحة
+    function logVisit() {
+        if (!recordVisitUrl || recordVisitUrl === '') {
+            console.warn('Visit recording skipped: Google Apps Script Web App URL not configured in index.html.');
+            return; // لا تقم بالتسجيل إذا لم يتم تكوين الرابط
+        }
+        // لا نحتاج إلى إرسال أي بيانات خاصة، فقط نستدعي الرابط لتشغيل دالة recordVisit في Apps Script
+        fetch(recordVisitUrl)
+            .then(response => response.text()) // اقرأ الاستجابة كنص
+            .then(text => {
+                // يمكنك تسجيل الاستجابة في الكونسول إذا أردت التأكد
+                console.log('Visit recording status:', text);
+            })
+            .catch(error => {
+                console.error('Error recording visit:', error);
+            });
+    }
+
+    // استدعاء الدالة عند تحميل المحتوى
+    document.addEventListener('DOMContentLoaded', logVisit);
+</script>
+<!-- نهاية كود تسجيل الزيارة -->
+
+</body>
